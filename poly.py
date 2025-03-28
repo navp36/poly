@@ -115,7 +115,7 @@ class LinkedList:
         if coeff == 0:
             return 0
         new_node = Node(coeff,exp)
-        if self.head == None or exp > self.head.exp:
+        if self.head is None or exp > self.head.exp:
             new_node.next = self.head
             self.head = new_node
             return
@@ -134,9 +134,6 @@ class LinkedList:
             curr = curr.next
         new_node.next = curr
         prev.next = new_node
-        
-            
-        pass
 
     # Add a polynomial p to the polynomial and return the resulting polynomial as a new linked list.
     def add(self, p):
@@ -183,36 +180,36 @@ class LinkedList:
         return result
 
     # Return a string representation of the polynomial.
-    def __str__(self):
-        if self.head == None:
-            return ""
-        exp_terms = []
+    def __iter__(self):
+        nodes = []
         curr = self.head
         while curr:
-            exp_terms.append(f"({curr.coeff}, {curr.exp})")
+            nodes.append(curr)
             curr = curr.next
-        return " + ".join(exp_terms)
+        return iter(nodes)
 
+    def __str__(self):
+        return " + ".join(f"({node.coeff}, {node.exp})" for node in self) or ""
+
+def read_non_empty():
+    line = input().strip()
+    while line == "":
+        line = input().strip()
+    return line
 
 def main():
-    p = LinkedList()    
-    for _ in range (int(input().strip())):
-        line = input().strip()
-        while line == "":
-            line = input().strip()
-        coeff, exp = map(int, line.split())
+    n = int(read_non_empty())
+    p = LinkedList()
+    for _ in range(n):
+        coeff, exp = map(int, read_non_empty().split())
         p.insert_term(coeff, exp)
+    m = int(read_non_empty())
     q = LinkedList()
-    for _ in range (int(input().strip())):
-        line = input().strip()
-        while line == "":
-            line = input().strip()
-        coeff, exp = map(int, line.split())
+    for _ in range(m):
+        coeff, exp = map(int, read_non_empty().split())
         q.insert_term(coeff, exp)
-
     sum_poly = p.add(q)
     mult_poly = p.mult(q)
-
     print(sum_poly)
     print(mult_poly)
 
